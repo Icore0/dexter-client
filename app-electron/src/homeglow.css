@@ -1,5 +1,6 @@
 /* homeglow.css - ambient light and halo for the Home picture */
-.app>.bar,.app>.body{position:relative;z-index:1}
+.app>.body{position:relative;z-index:1}
+.app>.bar{position:relative;z-index:30}   /* the Links and account drop-downs must sit above every card */
 .ambient{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:0;transition:opacity .8s var(--ease)}
 body.amb-on:not(.amb-off) .ambient{opacity:1}
 .amb-l,.hh-l{position:absolute;inset:0;background:center/cover no-repeat;image-rendering:auto;opacity:0;transition:opacity 1.4s var(--ease)}
