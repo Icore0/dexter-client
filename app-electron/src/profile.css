@@ -1,0 +1,62 @@
+/* profile.css - profile page, New profile card, Modrinth modpack popup, and two small visual fixes. */
+/* fix: the tick in the add-server form sat off-centre inside its square */
+.am-add button{display:inline-grid!important;place-items:center}
+.am-add button [data-i]{font-size:18px}
+/* the Library sort dropdown uses the same tidy .dd menu as before */
+.sortsel[hidden]{display:none}
+.dd{position:relative;display:inline-block}
+.dd-btn{display:inline-flex;align-items:center;gap:12px;height:44px;padding:0 16px 0 20px;border-radius:999px;background:var(--ctl-bg);box-shadow:var(--ctl-ring);font-weight:500;transition:background .2s}
+.dd-btn:hover{background:rgba(255,255,255,.1)}.dd-btn [data-i]{font-size:16px;color:var(--mute)}
+.dd-menu{position:absolute;z-index:30;top:calc(100% + 6px);left:0;min-width:100%;padding:6px;border-radius:16px;background:#121214;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 20px 50px rgba(0,0,0,.55)}
+.dd-menu[hidden]{display:none}
+.dd-menu button{display:block;width:100%;padding:9px 14px;border-radius:10px;white-space:nowrap;color:var(--mute);transition:background .15s,color .15s}
+.dd-menu button:hover{background:rgba(255,255,255,.08);color:var(--ink)}.dd-menu button.on{color:var(--ink);background:rgba(255,255,255,.06)}
+
+/* ---------- profile page (the old Mods page) ---------- */
+#mods .mods-bar .menu-wrap{display:none}
+.pf-head{position:relative;border-radius:var(--r-panel);overflow:hidden;margin-bottom:14px;background:#101012;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.pf-banner{position:absolute;inset:0;background:center/cover no-repeat;filter:saturate(1.05)}
+.pf-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,8,10,.92),rgba(8,8,10,.6) 55%,rgba(8,8,10,.35))}
+.pf-in{position:relative;display:flex;align-items:center;gap:18px;padding:22px 24px}
+.pf-back{flex:none;background:rgba(10,10,12,.55);backdrop-filter:blur(8px)}
+.pf-ico{flex:none;width:76px;height:76px;border-radius:20px;display:grid;place-items:center;font-weight:600;font-size:24px;background:linear-gradient(135deg,rgba(141,69,199,.9),rgba(60,30,100,.9));box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.pf-ico [data-i]{font-size:36px}
+.pf-t{min-width:0;flex:1}.pf-t h2{font-size:28px;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pf-chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.pf-desc{display:inline-flex;align-items:center;gap:8px;max-width:100%;color:var(--mute);text-align:left;line-height:1.4;padding:2px 0}.pf-desc [data-i]{font-size:15px;opacity:0;transition:opacity .2s}.pf-desc:hover{color:var(--ink)}.pf-desc:hover [data-i]{opacity:1}
+.pf-edit{width:min(520px,100%);min-height:56px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.08);color:var(--ink);font:inherit;resize:none;border:0;outline:0;box-shadow:inset 0 0 0 1.5px var(--p2);user-select:text}
+.pf-act{display:flex;gap:8px;align-items:center;flex:none}.pf-act .ib{background:rgba(10,10,12,.55);backdrop-filter:blur(8px)}
+
+/* library card icon */
+.lp-ico{flex:none;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:13px;font-weight:600;background:linear-gradient(135deg,rgba(141,69,199,.85),rgba(60,30,100,.85));margin-right:10px}
+.lp-ico [data-i]{font-size:20px}
+.lp-head{display:flex;align-items:center}.lp-head>div:not(.lp-ico){margin-right:auto;min-width:0}
+.lp{cursor:pointer}
+
+/* ---------- New profile card ---------- */
+.v2-sheet.top{z-index:95}
+.v2-card.np{width:min(680px,calc(100vw - 40px));max-height:calc(100vh - 40px);overflow:auto;padding:0 0 22px;gap:14px}
+.v2-card.np>*:not(.np-banner){margin-left:24px;margin-right:24px}
+.np-banner{position:relative;height:170px;background:#17171b center/cover no-repeat;flex:none;border-radius:var(--r-panel) var(--r-panel) 0 0}
+.np-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.55))}
+.np-ico{position:absolute;z-index:2;left:24px;bottom:-26px;width:76px;height:76px;border-radius:20px;display:grid;place-items:center;font-size:36px;background:linear-gradient(135deg,#8d45c7,#3c1e64);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25),0 10px 30px rgba(0,0,0,.5)}
+.np-bacts{position:absolute;z-index:2;right:14px;top:14px;display:flex;gap:8px}
+.np-tabs{display:flex;gap:4px;margin-top:38px!important;overflow-x:auto}.np-tabs button{height:32px;padding:0 13px;border-radius:999px;color:var(--mute);font-weight:500;font-size:13.5px;white-space:nowrap;transition:background .2s,color .2s}
+.np-tabs button:hover{color:var(--ink);background:rgba(255,255,255,.06)}.np-tabs button.on{background:#f2f2f5;color:#0b0b0d}
+.np-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;max-height:112px;overflow:auto}
+.np-thumbs button{aspect-ratio:16/9;border-radius:10px;background:center/cover #17171b;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:transform .15s}.np-thumbs button:hover{transform:translateY(-1px)}.np-thumbs button.on{box-shadow:inset 0 0 0 3px #f2f2f5}
+.np-row{display:flex;gap:12px}.np-f{display:flex;flex-direction:column;gap:6px;flex:1;font-size:12.5px;color:var(--dim)}.np-f.narrow{flex:none;width:150px}
+.np-f input,.np-f select{height:46px;padding:0 14px;border-radius:12px;background:rgba(255,255,255,.06);color:var(--ink);font:inherit;border:0;outline:0;user-select:text}.np-f input:focus,.np-f select:focus{box-shadow:inset 0 0 0 1.5px var(--p2)}.np-f select option{background:#121214}
+.np-label{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:-6px}
+.np-icons{display:flex;gap:6px;flex-wrap:wrap}.np-icons button{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.05);color:var(--mute);transition:background .2s,color .2s}.np-icons button:hover{background:rgba(255,255,255,.1);color:var(--ink)}.np-icons button.on{background:#f2f2f5;color:#0b0b0d}
+.np-mp{display:flex;gap:8px;flex-wrap:wrap;padding-top:6px;border-top:1px solid var(--line)}
+.v2-card.np .fr-err{flex-basis:auto}
+
+/* ---------- Modrinth modpacks popup ---------- */
+.v2-card.mp{width:min(640px,calc(100vw - 40px));height:min(640px,calc(100vh - 60px));gap:12px}
+.v2-card.mp header{display:flex;align-items:center;justify-content:space-between}
+.mp-list{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.mp-row{display:flex;gap:14px;align-items:center;padding:12px;border-radius:16px;background:rgba(255,255,255,.04)}
+.mp-row img{flex:none;width:52px;height:52px;border-radius:12px;background:#17171b;object-fit:cover}
+.mp-row .t{flex:1;min-width:0}.mp-row b{font-weight:500}.mp-row span{display:block;font-size:12.5px;color:var(--dim)}.mp-row p{margin-top:4px;font-size:13px;color:var(--mute);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mp-row .btn{flex:none}.mp-row .btn:disabled{opacity:.5}

@@ -1,0 +1,30 @@
+/* homeglow.css - ambient light and halo for the Home picture */
+.app>.bar,.app>.body{position:relative;z-index:1}
+.ambient{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:0;transition:opacity .8s var(--ease)}
+body.amb-on:not(.amb-off) .ambient{opacity:1}
+.amb-l,.hh-l{position:absolute;inset:0;background:center/cover no-repeat;image-rendering:auto;opacity:0;transition:opacity 1.4s var(--ease)}
+.amb-l.on,.hh-l.on{opacity:1}
+.amb-l{filter:saturate(1.25) brightness(.95)}
+/* keep text readable: darken the light towards the bottom and the corners */
+.ambient::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 30% 20%,rgba(7,7,9,.18),rgba(7,7,9,.62) 80%),linear-gradient(180deg,rgba(7,7,9,.2),rgba(7,7,9,.5))}
+.amb-glint{position:absolute;width:55vw;height:55vw;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.13),rgba(255,255,255,0) 62%);z-index:1;animation:ambDrift 60s ease-in-out infinite alternate;will-change:transform}
+.amb-glint.g1{left:-10vw;top:-20vw}.amb-glint.g2{right:-12vw;top:6vw;animation-duration:34s;animation-delay:-12s}
+@keyframes ambDrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(14vw,8vw,0) scale(1.18)}}
+/* the halo: the picture's own colours leaking out around the card */
+.hero-halo{position:absolute;z-index:0;pointer-events:none;left:-34px;right:-34px;top:-30px;height:calc(var(--hero-h) + 60px);border-radius:56px;opacity:0;transition:opacity .8s var(--ease);-webkit-mask-image:radial-gradient(closest-side,#000 60%,transparent);mask-image:radial-gradient(closest-side,#000 60%,transparent)}
+body.home-on .hero-halo{opacity:1}
+.hh-l{filter:blur(8px) saturate(1.6)}
+#home .hero{z-index:1}
+/* the glint: a soft diagonal shine that passes over the picture every few seconds */
+.hero-glint{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.11) 49%,rgba(255,255,255,.04) 54%,transparent 62%);background-size:260% 100%;background-position:130% 0;animation:heroGlint 12s ease-in-out infinite;will-change:background-position}
+@keyframes heroGlint{0%,62%{background-position:130% 0}100%{background-position:-30% 0}}
+body.dx-still .amb-glint,body.dx-still .hero-glint{animation-play-state:paused}
+/* every tab: the cards let the light through */
+body.amb-on:not(.amb-off){--card-fill:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,0) 60%),rgba(9,9,12,.55)}
+body.amb-on:not(.amb-off) .tx-list,body.amb-on:not(.amb-off) .tx-edit,body.amb-on:not(.amb-off) .lp,body.amb-on:not(.amb-off) .pf-list,body.amb-on:not(.amb-off) .nx-side,body.amb-on:not(.amb-off) .nx-card{background:rgba(11,11,14,.76)}
+body.home-on.amb-on:not(.amb-off) .hb-card,body.home-on.amb-on:not(.amb-off) .side-panel{background:rgba(9,9,12,.56);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+body.amb-on:not(.amb-off) .bar .tabs{background:rgba(9,9,12,.55)}
+@media (prefers-reduced-motion:reduce){.amb-glint,.hero-glint{animation:none}}
+/* controls stay readable over the light */
+body.amb-on:not(.amb-off) .search,body.amb-on:not(.amb-off) .dd-btn,body.amb-on:not(.amb-off) .bar .lk{background:rgba(9,9,12,.55)}
+body.amb-on:not(.amb-off) .search input::placeholder,body.amb-on:not(.amb-off) .search>[data-i]{color:var(--mute)}

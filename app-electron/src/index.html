@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data: blob:; media-src 'self'; connect-src https://api.mcsrvstat.us https://api.modrinth.com https://cdn.modrinth.com https://mc-heads.net data:; style-src 'self' 'unsafe-inline'; font-src 'self'">
+<title>Dexter</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="v2.css">
+<link rel="stylesheet" href="profile.css">
+<link rel="stylesheet" href="profile2.css">
+<link rel="stylesheet" href="home.css">
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="homeglow.css">
+<link rel="stylesheet" href="news.css">
+</head>
+<body>
+<div id="boot" aria-label="Loading"><div class="boot-glow"></div>
+  <svg class="boot-ring" aria-hidden="true"><rect class="track" pathLength="100"/><rect class="fill" pathLength="100"/></svg>
+  <div class="boot-core"><img class="boot-face" src="../assets/dexter-mark-dark.svg" alt=""><div class="boot-msg">Starting Dexter</div></div></div></div>
+
+<!-- ================= SIGN IN ================= -->
+<section class="login gone" id="login">
+  <div class="wctl"><button data-win="min"><span class="wi-min"></span></button><button class="x" data-win="close"><span class="wi-x"></span></button></div>
+  <img class="login-mark" src="../assets/dexter-mark-dark.svg" alt="">
+  <img class="login-word" src="../assets/dexter-wordmark-dark.svg" alt="Dexter">
+  <button class="ms" id="loginMs"><span class="msq"><i></i><i></i><i></i><i></i></span>Continue with Microsoft</button>
+  <button class="saved" id="loginOff"><i data-i="user"></i><b>Continue with offline account</b></button>
+  <span class="off-err" id="msErr"></span>
+  <div class="ms-code" id="msCode" hidden><small>Type this code at microsoft.com/link</small><b id="msCodeV"></b></div>
+  <form class="off-form" id="offForm" autocomplete="off" hidden>
+    <input id="offName" placeholder="Choose a username" maxlength="16" spellcheck="false">
+    <button class="off-go" type="submit" title="Continue"><i data-i="play"></i></button>
+    <span class="off-err" id="offErr"></span>
+  </form>
+</section>
+
+<div class="app">
+
+  <!-- ================= TOP BAR ================= -->
+  <header class="bar">
+    <div class="brand"><img src="../assets/dexter-mark-dark.svg" alt=""><img class="word" src="../assets/dexter-wordmark-dark.svg" alt="Dexter">
+      <!-- Support, Website and Discord: one button beside the logo, the three links drop down under it -->
+      <div class="menu-wrap">
+        <button class="lk" id="linksBtn"><i data-i="link"></i>Links<i data-i="down" class="chev"></i></button>
+        <div class="menu links-menu" id="linksMenu">
+          <div class="lk-head">Dexter</div>
+          <button data-link="https://dextercopilot.ai"><span class="lk-ico"><i data-i="web"></i></span><span class="lk-t"><b>Website</b><small>dextercopilot.ai</small></span><i data-i="out" class="lk-out"></i></button>
+          <button data-link="https://discord.gg/CUREmvuPgf"><span class="lk-ico dc"><i data-i="discord2"></i></span><span class="lk-t"><b>Discord</b><small>Chat with the community</small></span><i data-i="out" class="lk-out"></i></button>
+          <button data-link="mailto:team@dextercopilot.ai"><span class="lk-ico sp"><i data-i="chat"></i></span><span class="lk-t"><b>Support</b><small>team@dextercopilot.ai</small></span><i data-i="out" class="lk-out"></i></button>
+        </div>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <span class="ind" id="tabInd"></span>
+      <button class="on" data-go="home"><i data-i="home"></i>Home</button>
+      <button data-go="library"><i data-i="library"></i>Library</button>
+      <button data-go="events"><i data-i="events"></i>Events</button>
+      <button data-go="cosmetics"><i data-i="cosmetics"></i>Cosmetics</button>
+      <button data-go="clips"><i data-i="clips"></i>Clips</button>
+      <button data-go="news"><i data-i="news"></i>News</button>
+    </nav>
+    <div class="bar-r">
+      <button class="ib" id="frToggle" title="Friends"><i data-i="friends"></i></button>
+      <button class="ib" data-settings title="Settings"><i data-i="settings"></i></button>
+      <div class="menu-wrap">
+        <button class="me" id="meBtn"><img data-me-head alt=""><i data-i="down"></i></button>
+        <div class="menu acct-menu" id="menu">
+          <div class="am-label">Accounts</div>
+          <div id="acctList"></div>
+          <span id="addErr" hidden></span>
+          <form class="am-add" id="addForm" autocomplete="off">
+            <i data-i="plus"></i><input id="addName" placeholder="Add offline account" maxlength="16" spellcheck="false">
+            <button type="submit" title="Add"><i data-i="check"></i></button>
+          </form>
+          <button class="am-ms" id="msAdd"><span class="msq"><i></i><i></i><i></i><i></i></span>Login with Microsoft</button>
+          <button class="am-out" id="signOut"><i data-i="logout"></i>Sign out</button>
+        </div>
+      </div>
+      <div class="wctl">
+        <button data-win="min"><span class="wi-min"></span></button>
+        <button data-win="max"><span class="wi-max"></span></button>
+        <button class="x" data-win="close"><span class="wi-x"></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="body">
+    <main class="pages">
+
+      <!-- ================= HOME ================= -->
+      <section class="page on" id="home">
+        <div class="hero" id="hero">
+          <div class="hero-bg" id="heroBg"></div>
+          <div class="hero-bg next" id="heroBg2"></div>
+          <div class="hero-main">
+            <span class="pill swap" id="heroTag"></span>
+            <h1 class="swap" id="heroName"></h1>
+            <p class="swap" id="heroDesc"></p>
+            <div class="hero-actions">
+              <button class="play" data-launch title="Start Minecraft normally"><i data-i="play"></i>PLAY</button>
+              <!-- straight into the Dexter event server -->
+              <button class="btn ghost join-ev" data-join="play.dexter.gg" title="Join the live Dexter event"><span class="dot"></span><i data-i="events"></i>Join event</button>
+              <div class="menu-wrap drop-up">
+                <button class="instance" id="instBtn"><span class="inst-ico"><i data-i="gamepad"></i></span><b id="instName"></b><i data-i="down"></i></button>
+                <div class="menu" id="instMenu"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= EVENTS ================= -->
+      <section class="page" id="events">
+        <div class="split">
+          <aside class="side" id="evList"></aside>
+          <div class="scroll" id="evDetail"></div>
+        </div>
+      </section>
+
+      <!-- ================= MODS: everything on Modrinth ================= -->
+      <section class="page" id="mods">
+        <div class="scroll">
+          <div class="mods-bar">
+            <div class="menu-wrap">
+              <button class="instance sm" id="instBtn2"><span class="inst-ico"><i data-i="gamepad"></i></span><b id="instName2"></b><i data-i="down"></i></button>
+              <div class="menu" id="instMenu2"></div>
+            </div>
+            <div class="seg" id="modType">
+              <button class="on" data-t="mod"><i data-i="mods"></i>Mods</button>
+              <button data-t="modpack"><i data-i="layers"></i>Modpacks</button>
+              <button data-t="resourcepack"><i data-i="image"></i>Resource Packs</button>
+              <button data-t="datapack"><i data-i="code"></i>Data Packs</button>
+              <button data-t="shader"><i data-i="sun"></i>Shaders</button>
+            </div>
+          </div>
+          <div class="mods-bar">
+            <label class="search"><i data-i="search"></i><input id="modQ" placeholder="Search all of Modrinth"></label>
+            <select class="sortsel" id="modSort" title="Sort"><option value="relevance">Relevance</option><option value="downloads" selected>Most downloaded</option><option value="follows">Most followed</option><option value="newest">Newest</option><option value="updated">Recently updated</option></select>
+            <button class="chip" id="anyVer" title="Show projects for every Minecraft version, not just this profile's">Any version</button>
+            <div class="seg" id="modView"><button class="on" data-v="browse">Browse</button><button data-v="installed">Installed <span class="count" id="instCount">0</span></button></div>
+          </div>
+          <div class="chips" id="modCats"></div>
+          <div class="mod-grid" id="modGrid"></div>
+          <div class="mod-more muted" id="modMore"></div>
+        </div>
+      </section>
+
+
+      <!-- ================= LIBRARY (Dexter: profiles) ================= -->
+      <section class="page" id="library">
+        <div class="scroll">
+          <div class="mods-bar"><h2 class="pg-h">Library</h2>
+            <div class="lp-new"><button class="lp-newbtn" id="libNewBtn" type="button"><i data-i="plus"></i>New profile</button>
+              <form class="lp-form" id="libNew" hidden autocomplete="off"><b>New profile</b><label>Name<input name="n" placeholder="e.g. Practice, Skyblock" maxlength="48" spellcheck="false"></label><label>Minecraft version<select name="v"><option>1.21.11</option></select></label>
+                <div class="lp-form-act"><button type="button" class="lp-btn" id="libNewCancel">Cancel</button><button type="submit" class="lp-btn solid">Create profile</button></div></form></div>
+          </div>
+          <div id="libHero"></div>
+          <div class="lib-grid prof-grid" id="libGrid"></div>
+        </div>
+      </section>
+
+      <!-- ================= CLIPS (Dexter: clips + screenshots) ================= -->
+      <section class="page" id="clips">
+        <div class="scroll">
+          <div class="mods-bar"><h2 class="pg-h">Clips</h2>
+            <div class="seg" id="clipKind"><button class="on" data-k="clips"><i data-i="clips"></i>Clips</button><button data-k="screenshots"><i data-i="image"></i>Screenshots</button></div>
+          </div>
+          <div class="lib-grid clip-grid" id="clipGrid"></div>
+        </div>
+      </section>
+
+      <!-- ================= NEWS (Dexter: news feed) ================= -->
+      <section class="page" id="news">
+        <div class="scroll">
+          <div class="mods-bar"><h2 class="pg-h">News</h2><div class="chips" id="newsCats" style="margin:0"></div></div>
+          <div id="newsBody"></div>
+        </div>
+      </section>
+
+      <div class="toast" id="toast" hidden></div>
+      <aside class="mdet" id="mdet" hidden><div class="mdet-box" id="mdetBox"></div></aside>
+      <div class="article" id="article" hidden><div class="art-box" id="artBox"></div></div>
+      <!-- clip / screenshot viewer -->
+      <div class="viewer" id="viewer" hidden>
+        <div class="v-box"><canvas id="vCanvas"></canvas>
+          <div class="v-bar"><button class="btn ghost" id="vPlay"><i data-i="play"></i>Play</button><span class="muted" id="vInfo"></span><span style="flex:1"></span><button class="btn ghost danger" id="vDel"><i data-i="trash"></i>Delete</button><button class="btn ghost" id="vClose">Close</button></div>
+        </div>
+      </div>
+
+      <!-- ================= WARDROBE ================= -->
+      <section class="page" id="cosmetics">
+        <!-- the model on the left; the Dexter Locker (cloaks, emotes) on the right -->
+        <div class="ward locker-page">
+          <div class="ward-stage">
+            <div class="ward-name"><img data-me-head alt=""><b data-me-name></b></div>
+            <canvas id="skin3d"></canvas>
+            <button class="sk-btn" id="skBtn" title="Change skin"><i data-i="user"></i>Skins</button>
+            <div class="sk-pop" id="skPop" hidden>
+              <div class="sk-h"><b>Your skins</b><span class="muted" id="nSkin"></span><span class="sk-err" id="skErr"></span></div>
+              <div class="sk-grid" id="wSkin" data-w="skin"></div>
+              <input type="file" id="skFile" accept="image/png" multiple hidden>
+            </div>
+            <div class="ward-emotes"><div class="seg" id="wEmote"></div></div>
+          </div>
+          <div class="locker">
+            <div class="ward-h"><h3>Locker</h3><span class="muted" id="lockNote"></span></div>
+            <div class="seg" id="lockTabs"></div>
+            <div class="locker-grid" id="lockGrid"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ================= RIGHT PANEL: servers (default) / friends ================= -->
+    <div class="side-col">
+    <aside class="side-panel" id="sidePanel">
+      <div class="sp-head"><h3 id="spTitle">Servers</h3><button class="ib sm" id="spAdd" title="Add"><i data-i="plus"></i></button></div>
+      <div class="sp-view on" id="serverView">
+        <div class="ours" style="--img:url(../assets/servers/dexter.jpg)">
+          <img class="ours-word" src="../assets/dexter-wordmark-dark.svg" alt="Dexter">
+          <div class="ours-row"><span class="on-count" id="oursCount" hidden></span><button class="join big" data-join="play.dexter.gg">Join</button></div>
+        </div>
+        <div class="sp-label" id="savedLabel" hidden>Your servers</div>
+        <div id="savedList"></div>
+        <form class="am-add" id="srvForm" autocomplete="off" hidden><i data-i="plus"></i><input name="n" placeholder="Name" maxlength="40" spellcheck="false"><input name="a" placeholder="address" maxlength="80" spellcheck="false"><button type="submit" title="Add"><i data-i="check"></i></button></form>
+        <div class="sp-label">Popular</div>
+        <div id="serverList"></div>
+      </div>
+      <div class="sp-view" id="friendView"><div id="frList"></div></div>
+    </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SETTINGS (floating panel over the current tab) ================= -->
+<div class="sheet" id="settings">
+  <div class="sheet-panel">
+    <div class="sheet-h"><h2>Settings</h2><button class="ib" data-close-settings title="Close"><span class="wi-x"></span></button></div>
+    <div class="sheet-body">
+      <nav class="sheet-nav" id="setNav">
+        <button class="on" data-sec="game"><i data-i="gamepad"></i>Game</button>
+        <button data-sec="shield"><i data-i="shield"></i>Dexter Shield</button>
+        <button data-sec="perf"><i data-i="fire"></i>Performance</button>
+        <button data-sec="launcher"><i data-i="settings"></i>Launcher</button>
+        <button data-sec="social"><i data-i="friends"></i>Party</button>
+        <button data-sec="privacy"><i data-i="shield"></i>Privacy</button>
+        <button data-sec="account"><i data-i="user"></i>Account</button>
+      </nav>
+      <div class="sheet-main">
+        <section class="sec on" data-sec="game">
+          <h3>Performance</h3>
+          <div class="set-group">
+            <div class="set"><span class="si"><i data-i="layers"></i></span><b>Memory</b><div class="ram"><input type="range" id="ram" min="2" max="16" value="6"><span id="ramV">6 GB</span></div></div>
+            <div class="set"><span class="si"><i data-i="image"></i></span><b>Graphics</b><div class="seg" id="gfx"><button data-g="low">Low</button><button class="on" data-g="balanced">Balanced</button><button data-g="high">High</button></div></div>
+            <div class="set"><span class="si"><i data-i="code"></i></span><b>Java</b><span class="muted" id="javaNote">Automatic for each Minecraft version</span></div>
+          </div>
+          <h3>Window</h3>
+          <div class="set-group">
+            <div class="set"><span class="si"><i data-i="sun"></i></span><b>Resolution</b><button class="select" id="resSel">Default<i data-i="down"></i></button></div>
+            <div class="set"><span class="si"><i data-i="play"></i></span><b>Start in fullscreen</b><label class="tg"><input type="checkbox" id="fsTg"><span></span></label></div>
+          </div>
+        </section>
+        <section class="sec" data-sec="shield">
+          <div class="shield-card"><span class="big"><i data-i="shield"></i></span><div><b id="shieldT">Protection is off</b><span id="shieldS">Checking</span></div></div>
+          <div class="set-group">
+            <div class="set"><span class="si"><i data-i="verified"></i></span><b>Block unverified mods in events</b><label class="tg"><input type="checkbox" checked disabled data-note="Needs the Dexter Shield service"><span></span></label></div>
+            <div class="set"><span class="si"><i data-i="search"></i></span><b>Scan files on every launch</b><label class="tg"><input type="checkbox" checked data-ui="scan"><span></span></label></div>
+          </div>
+        </section>
+        <section class="sec" data-sec="perf"><h3>Performance settings</h3><div class="set-group" id="vsPerf"></div></section>
+        <section class="sec" data-sec="social"><div class="set-group" id="vsSocial"></div></section>
+        <section class="sec" data-sec="privacy"><div class="set-group" id="vsPrivacy"></div></section>
+        <section class="sec" data-sec="launcher">
+          <div class="set-group">
+            <div class="set"><span class="si"><i data-i="gamepad"></i></span><b>Menu key</b><kbd>Right Shift</kbd></div>
+            <div class="set"><span class="si"><i data-i="friends"></i></span><b>Discord status</b><label class="tg"><input type="checkbox" checked data-ui="discord"><span></span></label></div>
+            <div class="set"><span class="si"><i data-i="layers"></i></span><b>Stay open in game</b><label class="tg"><input type="checkbox" id="keepTg"><span></span></label></div>
+            <div class="set"><span class="si"><i data-i="play"></i></span><b>Start with computer</b><label class="tg"><input type="checkbox" id="startTg"><span></span></label></div>
+            <div id="vsLauncher"></div>
+            <div class="set"><span class="si"><i data-i="world"></i></span><b>Language</b><button class="select">English<i data-i="down"></i></button></div>
+          </div>
+        </section>
+        <section class="sec" data-sec="account">
+          <div class="acct-card"><img data-me-body alt=""><div><b data-me-name></b><span data-me-type></span></div></div>
+          <div class="acct-actions"><button class="btn ghost"><i data-i="user"></i>Switch account</button><button class="btn ghost danger" id="signOut2"><i data-i="logout"></i>Sign out</button></div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= LAUNCH ================= -->
+<div class="modal" id="modal">
+  <div class="mbox">
+    <div class="mbox-h"><b id="mTitle">Starting</b><button class="btn ghost" id="mCancel">Cancel</button></div>
+    <div id="mSteps"></div>
+    <div class="mprog"><i id="mBar"></i></div>
+  </div>
+</div>
+
+<script src="icons.js"></script>
+<script src="vendor/skinview3d.bundle.js"></script>
+<script src="cosmetics3d.js"></script>
+<script src="locker3d.js"></script>
+<script src="../assets/locker/catalog.js"></script>
+<script src="banners.js"></script>
+<script src="sounds.js"></script>
+<script src="app.js"></script>
+<script src="extras.js"></script>
+<script src="extras2.js"></script>
+<script src="social-api.js"></script>
+<script src="v2.js"></script>
+<script src="profile.js"></script>
+<script src="library.js"></script>
+<script src="home.js"></script>
+<script src="homeglow.js"></script>
+<script src="homebg.js"></script>
+<script src="news.js"></script>
+<script src="boot.js"></script>
+<script src="perf.js"></script>
+</body>
+</html>
