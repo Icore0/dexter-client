@@ -728,3 +728,7 @@ input:focus,input:focus-visible{outline:none}
 .bp-up{display:grid;grid-template-columns:300px 1fr;gap:22px;align-items:center;padding:6px 2px}.bp-up p{color:var(--mute);line-height:1.5;margin:6px 0 14px;font-size:14px}
 .bp-cur{aspect-ratio:16/9;border-radius:14px;background:center/cover #17171b;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}.bp-cur.empty{display:grid;place-items:center;color:var(--dim);font-size:34px}
 .bp-row{display:flex;gap:8px;flex-wrap:wrap}.bp-err{display:block;margin-top:10px;color:#ff9a9e;font-size:13px}
+
+/* Cosmetics: coming soon */
+#cosmetics .ward{display:none!important}
+#cosmetics .soon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Pixelify Sans',monospace;font-weight:700;font-size:clamp(56px,9vw,128px);line-height:.95;letter-spacing:.04em;color:#fff;text-transform:uppercase;text-shadow:5px 5px 0 rgba(0,0,0,.55);padding:0 40px}

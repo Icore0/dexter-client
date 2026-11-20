@@ -98,7 +98,7 @@ function applyAccount() {
   $$('[data-me-head]').forEach(i => i.src = headUrl(a.name));
   if (wearing) skinOf(wearing.id).then(im => { if (im) { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d'); g.imageSmoothingEnabled = false; g.drawImage(im, 8, 8, 8, 8, 0, 0, 64, 64); g.drawImage(im, 40, 8, 8, 8, 0, 0, 64, 64); $$('[data-me-head]').forEach(i => i.src = c.toDataURL()); } });
   $$('[data-me-name]').forEach(e => e.textContent = a.name);
-  $$('[data-me-type]').forEach(e => e.textContent = a.type === 'microsoft' ? 'Microsoft account' : 'Offline account');
+  $$('[data-me-type]').forEach(e => e.textContent = 'Dexter');
   $$('[data-me-body]').forEach(i => i.src = `https://mc-heads.net/body/${a.name}/right`);
   // only the newest request may set the skin: a slow download of the account's own skin must not overwrite one just picked
   const t = ++skinSeq, im = new Image(); im.crossOrigin = 'anonymous';

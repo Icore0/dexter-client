@@ -3,7 +3,11 @@
 // When the real launcher logic is added, expose more here (launch, install, auth, ...) and keep it this narrow.
 const { contextBridge, ipcRenderer } = require('electron');
 
+const UI_STYLE = (process.argv.find(a => a.startsWith('--dx-style=')) || '').slice(11) === 'pvphq' ? 'pvphq' : 'glass';
+
 contextBridge.exposeInMainWorld('dexter', {
+  uiStyle: UI_STYLE,   // 'glass' | 'pvphq': chosen in Settings, read by main.js when the window is made
+  setUiStyle: s => ipcRenderer.send('uiStyleSet', String(s)),
   min: () => ipcRenderer.send('win', 'min'),
   max: () => ipcRenderer.send('win', 'max'),
   close: () => ipcRenderer.send('win', 'close'),
@@ -32,6 +36,7 @@ contextBridge.exposeInMainWorld('dexter', {
 
 window.addEventListener('DOMContentLoaded', () => {
   document.documentElement.classList.add('electron');
-  if (process.platform === 'darwin') document.documentElement.classList.add('glass');   // main.js gives macOS windows vibrancy
+  if (UI_STYLE === 'pvphq') document.documentElement.classList.add('pvphq');   // flat and opaque, no glass
+  else if (process.platform === 'darwin') document.documentElement.classList.add('glass');   // main.js gives macOS windows vibrancy
   if (process.platform === 'win32') document.documentElement.classList.add('win');      // main.js gives Windows an opaque window: clip the page's own corners
 });

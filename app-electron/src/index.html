@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="boot.css">
 <link rel="stylesheet" href="homeglow.css">
 <link rel="stylesheet" href="news.css">
+<script src="style-load.js" data-load="css"></script>
 </head>
 <body>
 <div id="boot" aria-label="Loading"><div class="boot-glow"></div>
@@ -189,6 +190,7 @@
 
       <!-- ================= WARDROBE ================= -->
       <section class="page" id="cosmetics">
+        <div class="soon">Coming<br>soon</div>
         <!-- the model on the left; the Dexter Locker (cloaks, emotes) on the right -->
         <div class="ward locker-page">
           <div class="ward-stage">
@@ -257,6 +259,7 @@
           <h3>Window</h3>
           <div class="set-group">
             <div class="set"><span class="si"><i data-i="sun"></i></span><b>Resolution</b><button class="select" id="resSel">Default<i data-i="down"></i></button></div>
+            <div class="set"><span class="si"><i data-i="layers"></i></span><b>Launcher style</b><div class="seg" id="uiStyle"><button data-s="glass">Modern</button><button data-s="pvphq">Minecraft</button></div></div>
             <div class="set"><span class="si"><i data-i="play"></i></span><b>Start in fullscreen</b><label class="tg"><input type="checkbox" id="fsTg"><span></span></label></div>
           </div>
         </section>
@@ -299,6 +302,7 @@
 </div>
 
 <script src="icons.js"></script>
+<script src="style-load.js" data-load="pvphq-icons.js"></script>
 <script src="vendor/skinview3d.bundle.js"></script>
 <script src="cosmetics3d.js"></script>
 <script src="locker3d.js"></script>
@@ -316,6 +320,8 @@
 <script src="homeglow.js"></script>
 <script src="homebg.js"></script>
 <script src="news.js"></script>
+<script src="style-load.js" data-load="pvphq.js"></script>
+<script src="style-switch.js"></script>
 <script src="boot.js"></script>
 <script src="perf.js"></script>
 </body>

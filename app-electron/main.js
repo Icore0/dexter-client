@@ -27,6 +27,16 @@ app.commandLine.appendSwitch('disable-features', 'SpareRendererForSitePerProcess
 app.commandLine.appendSwitch('enable-features', 'NetworkServiceInProcess2');
 app.setName('Dexter Client');
 app.setPath('userData', path.join(app.getPath('appData'), 'Dexter Client'));
+// the launcher style (glass or PvPHQ) lives in a tiny file; changing it in Settings restarts the launcher
+const STYLE_FILE = path.join(app.getPath('userData'), 'ui-style.json');
+let UI_STYLE = 'glass';
+try { if (JSON.parse(fs.readFileSync(STYLE_FILE, 'utf8')).style === 'pvphq') UI_STYLE = 'pvphq'; } catch { /* first run: glass */ }
+if (process.env.DEXTER_UI_STYLE) UI_STYLE = process.env.DEXTER_UI_STYLE === 'pvphq' ? 'pvphq' : 'glass';   // dev self-test
+ipcMain.on('uiStyleSet', (_e, s) => {
+  const style = s === 'pvphq' ? 'pvphq' : 'glass';
+  try { fs.mkdirSync(path.dirname(STYLE_FILE), { recursive: true }); fs.writeFileSync(STYLE_FILE, JSON.stringify({ style })); } catch { return; }
+  app.relaunch(); app.quit();
+});
 
 // ---- Dexter backend: accounts, profiles, game launch, installs, servers and settings are the Dexter Client launcher's own logic ----
 // The Java side (DexterBackend) runs headless on 127.0.0.1 with a one-time token. This process is the only
@@ -157,13 +167,14 @@ async function createWindow() {
     maximizable: signedIn,
     fullscreenable: false,
     frame: false,
-    ...(MAC ? { transparent: false, vibrancy: 'hud', visualEffectState: 'active', roundedCorners: true }
+    ...(UI_STYLE === 'pvphq' ? (MAC ? { transparent: false, backgroundColor: '#0b0b0d', roundedCorners: true } : WIN ? { transparent: false, roundedCorners: false, backgroundColor: '#0b0b0d' } : { transparent: true })
+      : MAC ? { transparent: false, vibrancy: 'hud', visualEffectState: 'active', roundedCorners: true }
       : WIN ? { transparent: false, roundedCorners: true, backgroundColor: '#0b0b0d' }
       : { transparent: true }),
-    backgroundColor: WIN ? '#0b0b0d' : '#00000000',
+    backgroundColor: (WIN || (MAC && UI_STYLE === 'pvphq')) ? '#0b0b0d' : '#00000000',
     show: false,
     icon,
-    webPreferences: { preload: path.join(__dirname, 'preload.js'), autoplayPolicy: 'no-user-gesture-required', spellcheck: false, backgroundThrottling: !SELFTEST, enableWebSQL: false },   // launcher sounds; the self-test must keep painting while its window is in the background
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), additionalArguments: ['--dx-style=' + UI_STYLE], autoplayPolicy: 'no-user-gesture-required', spellcheck: false, backgroundThrottling: !SELFTEST, enableWebSQL: false },   // launcher sounds; the self-test must keep painting while its window is in the background
   });
 
   hideTray();   // the window is back: no tray icon needed

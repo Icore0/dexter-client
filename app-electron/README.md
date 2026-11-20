@@ -65,3 +65,6 @@ build deliberately does not try to work around the warning. Nothing else about t
 
 Data folders on Windows: the launcher UI keeps banners and caches in `%APPDATA%\Dexter Client`, the backend keeps
 profiles, accounts and the game in `%APPDATA%\DexterClient`. Installing, updating or uninstalling never touches either.
+
+## Two looks, one launcher
+Settings > Game > Window > **Launcher style** switches between **Modern** (the original glass look) and **Minecraft** (flat dark, left sidebar, play dock, Gallery). The choice is saved in `<userData>/ui-style.json` and the launcher restarts so the window is rebuilt. The PvPHQ look is `src/pvphq.css`, `src/pvphq.js` and `src/pvphq-icons.js` (Lucide icons, see `LICENSE-lucide.txt`); `src/style-load.js` loads them only when PvPHQ is chosen, so Glass is untouched. For a test run set `DEXTER_UI_STYLE=pvphq`.
