@@ -20,7 +20,7 @@ async function drawLibrary() {
         <div class="lp-stats"><span><b>${p.mods}</b> mods</span><span>${p.playMillis ? `<b>${fmtPlay(p.playMillis)}</b> played` : 'Not played yet'}</span><span><b>${p.sessions}</b> sessions</span></div>
         <div class="lp-act"><button class="lp-play" data-lib="play"><i data-i="play"></i>Play</button><button class="lp-btn" data-lib="mods">Open</button></div>
       </div></article>`).join('')
-    : `<div class="lib-empty">${LIB.length ? 'No profile matches your search.' : 'No profiles yet. Press New profile to make one.'}</div>`;
+    : `<div class="lib-empty">${LIB.length ? 'No matches.' : 'No profiles yet. Press New profile.'}</div>`;
   icons($('#libGrid')); icons($('#libHero'));
 }
 PAGE_LOAD.library = drawLibrary;
@@ -152,7 +152,7 @@ async function drawVExtra() {
   const act = (id, ic, t, note, label) => `<div class="set"><span class="si"><i data-i="${ic}"></i></span><b>${t}<small id="${id}Note">${note}</small></b><button class="lp-btn" data-act="${id}">${label}</button></div>`;
   host.querySelectorAll('.vx').forEach(n => n.remove());
   const x = document.createElement('div'); x.className = 'vx';
-  x.innerHTML = tg('titleMusic', 'play', 'Title screen music', 'A calm Dexter track on the game’s title screen instead of the menu music.', ip.titleMusic)
+  x.innerHTML = tg('titleMusic', 'play', 'Title screen music', 'A calm Dexter track on the title screen.', ip.titleMusic)
     + tg('guides', 'star', 'First-start guide', 'New profiles walk you through the main settings once.', ip.guides)
     + tg('sounds', 'play', 'In-game interface sounds', 'The quiet clicks in the game’s Dexter menus.', ip.sounds)
     + act('sysCheck', 'shield', 'System check', 'Memory, swap and disk space.', 'Run')

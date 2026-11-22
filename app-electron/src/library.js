@@ -22,7 +22,7 @@
     document.getElementById('libCount').textContent = `${LIB.length} profile${LIB.length === 1 ? '' : 's'} · ${fmtPlay(LIB.reduce((a, p) => a + p.playMillis, 0))} played`;
     const list = LIB.filter(p => p.name.toLowerCase().includes(libQuery));
     list.sort(libSort === 'name' ? (a, b) => a.name.localeCompare(b.name) : libSort === 'playtime' ? (a, b) => b.playMillis - a.playMillis : (a, b) => b.createdAt - a.createdAt);
-    const html = list.length ? list.map(card).join('') : `<div class="lib-empty">${LIB.length ? 'No profile matches your search.' : 'No profiles yet. Press New profile to make one.'}</div>`;
+    const html = list.length ? list.map(card).join('') : `<div class="lib-empty">${LIB.length ? 'No matches.' : 'No profiles yet. Press New profile.'}</div>`;
     if (html === lastHtml) return;                         // nothing changed: leave the page alone
     lastHtml = html; grid.innerHTML = html; icons(grid);
     list.forEach(p => { const i = new Image(); i.src = profileBanner(p.id); });   // warm the pictures so they do not pop in later

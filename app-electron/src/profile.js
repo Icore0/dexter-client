@@ -75,7 +75,7 @@
         <span class="pf-type t-${m.type}">${TYPE_NAME[m.type] || m.type}</span>
         ${m.type === 'datapack' ? '<span class="pf-tgsp"></span>' : `<label class="tg" title="${m.enabled ? 'On: turn off without removing' : 'Off: turn on'}"><input type="checkbox" data-pftg="${n}" ${m.enabled ? 'checked' : ''}><span></span></label>`}
         <button class="ib pf-rm" data-pfrm="${n}" title="Remove" aria-label="Remove"><i data-i="trash"></i></button></div>`).join('')
-      : `<div class="pf-empty"><i data-i="${pfItems.length ? 'search' : 'mods'}"></i><b>${pfItems.length ? (pfFilter !== 'all' && !q ? `No ${RIB.find(r => r[0] === pfFilter)[1].toLowerCase()} yet` : 'Nothing matches') : 'Nothing installed yet'}</b><span>${pfItems.length ? (pfFilter !== 'all' && !q ? 'Use Add content to get some.' : 'Try another word.') : 'Add mods, texture packs, data packs or shaders.'}</span>${pfItems.length && (pfFilter === 'all' || q) ? '' : '<button class="btn green" data-pf="add"><i data-i="download"></i>Add content</button>'}</div>`;
+      : `<div class="pf-empty"><i data-i="${pfItems.length ? 'search' : 'mods'}"></i><b>${pfItems.length ? (pfFilter !== 'all' && !q ? `No ${RIB.find(r => r[0] === pfFilter)[1].toLowerCase()} yet` : 'Nothing matches') : 'Nothing installed yet'}</b><span>${pfItems.length ? (pfFilter !== 'all' && !q ? 'Press Add content.' : 'Try another word.') : 'Add mods, texture packs, data packs or shaders.'}</span>${pfItems.length && (pfFilter === 'all' || q) ? '' : '<button class="btn green" data-pf="add"><i data-i="download"></i>Add content</button>'}</div>`;
     icons(list);
   }
   rib.addEventListener('click', e => { const b = e.target.closest('[data-pff]'); if (b) { pfFilter = b.dataset.pff; sound('select'); drawList(); } });
@@ -193,7 +193,7 @@
       }
       if (k === 'import') {
         const f = document.createElement('input'); f.type = 'file'; f.accept = '.mrpack,application/zip';
-        f.onchange = async () => { const file = f.files[0]; if (!file) return; if (typeof window.ProfileAPI.importMrpack !== 'function') { sound('error'); $('#npErr', d).textContent = 'Importing a modpack file is not connected yet (preview).'; return; } try { await window.ProfileAPI.importMrpack(file); sound('success'); close(); await loadInstances(); drawInstances(); drawLibrary(); } catch (err) { sound('error'); $('#npErr', d).textContent = 'Could not import that file.'; } };
+        f.onchange = async () => { const file = f.files[0]; if (!file) return; if (typeof window.ProfileAPI.importMrpack !== 'function') { sound('error'); $('#npErr', d).textContent = 'Modpack import is coming soon.'; return; } try { await window.ProfileAPI.importMrpack(file); sound('success'); close(); await loadInstances(); drawInstances(); drawLibrary(); } catch (err) { sound('error'); $('#npErr', d).textContent = 'Could not import that file.'; } };
         return f.click();
       }
       if (k === 'iconup') { const f = document.createElement('input'); f.type = 'file'; f.accept = 'image/png,image/jpeg,image/webp'; f.onchange = () => { const file = f.files[0]; if (!file) return; if (file.size > 4e6) { $('#npErr', d).textContent = 'That picture is over 4 MB.'; return; } const r = new FileReader(); r.onload = async () => { try { iconImg = await imgToPng(r.result); $('#npErr', d).textContent = ''; paint(); } catch { $('#npErr', d).textContent = 'Could not read that picture.'; } }; r.readAsDataURL(file); }; return f.click(); }
@@ -226,9 +226,9 @@
     const versions = (typeof VERSIONS !== 'undefined' ? VERSIONS.map(v => v.id) : []);
     let found = []; try { found = await window.dexter.launchersDetect(); } catch { found = []; }
     const body = d.querySelector('#impBody'); const all = [];
-    if (!found.length) { body.innerHTML = '<div class="imp-state"><i data-i="search"></i><b>No other launcher found</b><span>Dexter looks for the Modrinth App, Prism Launcher and MultiMC.</span></div>'; icons(body); return wire(); }
+    if (!found.length) { body.innerHTML = '<div class="imp-state"><i data-i="search"></i><b>No other launcher found</b><span>Looks for Modrinth App, Prism and MultiMC.</span></div>'; icons(body); return wire(); }
     body.innerHTML = found.map(l => `<div class="sp-label">${esc(l.name)} · ${l.instances.length}</div>` + l.instances.map(r => {
-      const why = !['fabric', 'vanilla'].includes(r.loader) ? `Dexter runs Fabric (this is ${r.loader})` : versions.length && !versions.includes(r.version) ? `Minecraft ${r.version} is not supported` : '';
+      const why = !['fabric', 'vanilla'].includes(r.loader) ? `Needs Fabric (this is ${r.loader})` : versions.length && !versions.includes(r.version) ? `Minecraft ${r.version} not supported` : '';
       all.push({ ...r, why, launcher: l.name });
       return `<label class="imp-row${why ? ' no' : ''}" data-ik="${esc(r.key)}"><input type="checkbox" ${why ? 'disabled' : 'checked'}><span class="imp-ck"></span><div class="t"><b>${esc(r.name)}</b><span>${esc(r.version)} · ${esc(r.loader)} · ${r.mods} ${r.mods === 1 ? 'mod' : 'mods'}${why ? ' · ' + esc(why) : ''}</span></div><i class="imp-st" data-st></i></label>`;
     }).join('')).join('');
@@ -325,7 +325,7 @@
   }
 })();
 
-/* ---------------- 6) Velo launcher settings Dexter did not have yet (colours/theme editor excluded on purpose) ---------------- */
+/* ---------------- 6) launcher settings Dexter did not have yet (colours/theme editor excluded on purpose) ---------------- */
 (function () {
   const sound = n => { try { typeof sfx === 'function' && sfx(n); } catch { /* optional */ } };
   const say = m => { try { toast(m); } catch { /* optional */ } };

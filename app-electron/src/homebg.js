@@ -84,10 +84,10 @@
       seg.innerHTML = [['rotate', 'Favourite backgrounds'], ['one', 'One picture']].map(([k, n]) => `<button data-hbm="${k}" class="${k === mode ? 'on' : ''}">${n}</button>`).join('');
       const own = [...OWN].map(([k, v]) => th(k, v.url, mode)).join('');
       const ids = BANNER_POOL;
-      const info = mode === 'rotate' ? `<p class="muted">${favs().length ? (favs().length === 1 ? '1 favourite stays on Home. Add more and they change slowly.' : `${favs().length} favourites change slowly while you are on Home.`) : 'Tap the heart on the pictures you like. They change slowly while you are on Home. Until you pick some, all banners are used.'}</p>` : '<p class="muted">Pick the picture that stays on Home.</p>';
+      const info = mode === 'rotate' ? `<p class="muted">${favs().length ? (favs().length === 1 ? '1 favourite stays on Home. Add more and they change slowly.' : `${favs().length} favourites rotate slowly on Home.`) : 'Tap the heart on the pictures you like. They change slowly while you are on Home. Until you pick some, all banners are used.'}</p>` : '<p class="muted">Pick a Home picture.</p>';
       body.innerHTML = `${info}
         <div class="hbp-sec"><b>Your pictures</b><button class="btn ghost sm" data-hb2="add"><i data-i="image"></i>Add pictures</button></div>
-        ${own ? `<div class="hbp-grid">${own}</div>` : '<p class="muted hbp-none">Add your own pictures or GIFs (up to 5 MB each).</p>'}
+        ${own ? `<div class="hbp-grid">${own}</div>` : '<p class="muted hbp-none">Add pictures or GIFs, up to 5 MB each.</p>'}
         <div class="hbp-sec"><b>Banners</b></div>
         <div class="hbp-grid">${ids.map(i => th('b' + String(i).padStart(3, '0'), bannerUrl(i), mode)).join('')}</div>`;
       icons(d);

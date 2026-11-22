@@ -194,7 +194,7 @@
     gcount = {}; listAll.forEach(it => { gcount[it.g] = (gcount[it.g] || 0) + 1; });
     shownN = Math.min(listAll.length, 300);
     el('txCount').textContent = listAll.length ? `${listAll.length.toLocaleString()} ${listAll.length === 1 ? 'result' : 'results'}` : 'Nothing found';
-    el('txGrid').innerHTML = rowsFrom(0, shownN) || '<div class="tx-empty">No match. Try another word.</div>';
+    el('txGrid').innerHTML = rowsFrom(0, shownN) || '<div class="tx-empty">No match.</div>';
     paintCanvases();
   }
   function paintCanvases() { el('txGrid').querySelectorAll('canvas[data-ic]').forEach(c => { const it = ITEMS.find(i => i.k === c.dataset.ic); if (it) paintSmall(c, getArt(it), project[it.k]?.n || it.n); }); }
@@ -440,11 +440,11 @@
       <form class="fr-add" id="vcNew" autocomplete="off"><input name="n" placeholder="Name a new group" maxlength="24" spellcheck="false" aria-label="Group name"><button class="btn solid sm" type="submit"><i data-i="plus"></i>Create</button><span class="fr-err">${esc(addErr)}</span></form>
       ${s.groups.map(g => { const names = g.members.concat(g.live.includes('You') ? [me] : []); const live = g.live.map(n => n === 'You' ? me : n);
         return `<div class="vg2 ${g.joined ? 'on' : ''}"><div class="vg2-h"><div class="vg2-ico${live.length ? ' live' : ''}"><i data-i="voice"></i></div><div class="t"><b>${esc(g.name)}</b><span>${live.length ? live.length + ' talking' : 'Quiet'} · ${names.length} ${names.length === 1 ? 'member' : 'members'}</span></div></div>
-          <div class="vg2-m">${names.length ? names.slice(0, 7).map(n => `<span class="vg2-av${live.includes(n) ? ' live' : ''}" title="${esc(n)}"><img src="${head(n)}" alt=""></span>`).join('') + (names.length > 7 ? `<span class="vg2-more">+${names.length - 7}</span>` : '') : '<span class="muted">Empty. Invite friends from the Friends tab.</span>'}</div>
+          <div class="vg2-m">${names.length ? names.slice(0, 7).map(n => `<span class="vg2-av${live.includes(n) ? ' live' : ''}" title="${esc(n)}"><img src="${head(n)}" alt=""></span>`).join('') + (names.length > 7 ? `<span class="vg2-more">+${names.length - 7}</span>` : '') : '<span class="muted">Empty. Invite friends first.</span>'}</div>
           ${g.joined ? `<button class="btn ghost sm vg2-b leave" data-vleave="${g.id}"><i data-i="logout"></i>Leave group</button>` : `<button class="btn solid sm vg2-b" data-vjoin="${g.id}" ${s.inGame ? 'disabled' : ''}><i data-i="voice"></i>Join group</button>`}</div>`; }).join('')}`;
   }
   function drawSocial() {
-    fl.innerHTML = `${Social.mock ? '<div class="preview-tag"><i data-i="danger"></i>Preview data. Not connected yet.</div>' : ''}
+    fl.innerHTML = `${Social.mock ? '<div class="preview-tag"><i data-i="danger"></i>Preview data</div>' : ''}
       <div class="seg wide" id="frSeg"><button data-frtab="friends" class="${frTab === 'friends' ? 'on' : ''}">Friends</button><button data-frtab="voice" class="${frTab === 'voice' ? 'on' : ''}">Voice</button></div>
       ${frTab === 'friends' ? drawFriends() : drawVoice()}`;
     icons(fl);

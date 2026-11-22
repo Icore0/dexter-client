@@ -15,23 +15,23 @@ const BE = (m, p, b) => window.dexter?.api ? window.dexter.api(m, p, b) : Promis
 /* ================= sample data ================= */
 const EVENTS = [
   { id: 'lava', name: 'Lava Rise', state: 'reg', tag: 'Saturday 19:00', mode: 'Solo race', when: 'Sat 19:00', prize: '$500', players: '84 / 120', img: 'events/lava-race.jpg',
-    desc: 'The lava rises every 20 seconds. Climb faster than everyone or burn.',
+    desc: 'Lava rises every 20 seconds. Climb or burn.',
     rules: ['Join from the Dexter launcher with Shield on.', 'No blocks outside the arena walls.', 'Touch lava and you spectate.', 'Top 10 from each heat reach the final.'],
     rewards: [['1st', '$250'], ['2nd', '$150'], ['3rd', '$100'], ['Every finisher', 'Lava Rise cape']] },
   { id: 'br', name: 'Battle Royale', state: 'live', tag: 'Live now', mode: '100 players', when: 'Round 3 of 5', prize: '$1,000', players: '100 / 100', img: 'events/battle-royale.jpg',
-    desc: '100 players, one shrinking border. Last one standing wins the round.',
+    desc: '100 players, one shrinking border. Last one standing wins.',
     rules: ['Chests refill once per round.', 'Teaming in solo rounds is a ban.', 'The border closes every 3 minutes.', 'Points for kills and placement.'],
     rewards: [['Champion', '$500'], ['2nd', '$300'], ['3rd', '$200'], ['Top 25', 'Royale banner']] },
   { id: 'squid', name: 'Squid Game', state: 'reg', tag: 'Sunday 18:00', mode: '456 players', when: 'Sun 18:00', prize: '$1,500', players: '311 / 456', img: 'events/squid-game.jpg',
-    desc: 'Six playground games in a row. One mistake and you are out.',
+    desc: 'Six games in a row. One mistake and you are out.',
     rules: ['Games are revealed live.', 'Spectators cannot talk to players.', 'Disconnecting counts as elimination.', 'The final is one on one.'],
     rewards: [['Winner', '$1,500'], ['Final 10', 'Player 456 cape'], ['Everyone', 'Event badge']] },
   { id: 'smp', name: 'Dexter SMP', state: 'open', tag: 'Season 3 opens Friday', mode: 'Survival', when: 'Always on', prize: 'Monthly awards', players: '3,410', img: 'events/smp.jpg',
-    desc: 'Our survival world between events. Build, trade and team up.',
+    desc: 'Our survival world. Build, trade, team up.',
     rules: ['One account per player.', 'Claims are protected, griefing is a ban.', 'Shops use the in-game economy.', 'Season 3 starts on a fresh map.'],
     rewards: [['Best build', 'Builder cape'], ['Richest player', 'Golden halo'], ['Most active', 'SMP banner']] },
   { id: 'manhunt', name: 'Manhunt', state: 'reg', tag: 'Dec 6, 20:00', mode: '1 vs 5', when: 'Dec 6', prize: '$300', players: '42 / 60', img: 'events/manhunt.jpg',
-    desc: 'One runner tries to beat the game. Five hunters try to stop them.',
+    desc: 'One runner, five hunters.',
     rules: ['Runners are picked by seed.', 'Hunters get tracking compasses.', 'The runner wins on the dragon kill.', 'Runners have three lives.'],
     rewards: [['Best runner', '$200'], ['Best hunters', '$100'], ['Everyone', 'Compass badge']] },
 ];
@@ -418,7 +418,7 @@ async function loadMods() {
   }
   ctl?.abort(); ctl = new AbortController();
   $('#modGrid').innerHTML = '<div class="skel"></div>'.repeat(9);
-  if (!INSTANCES[inst]) return empty('mods', 'Create a profile first (the profile picker, top left)');
+  if (!INSTANCES[inst]) return empty('mods', 'Create a profile first');
   const i = INSTANCES[inst], t = TYPES[type];
   const f = [[`versions:${i.ver}`], [t.facet]];
   if (type === 'mod' || type === 'modpack') f.push([`categories:${i.loader}`]);
@@ -620,7 +620,7 @@ let launching = null;   // the profile id of the launch the popup is showing
 async function launch(host) {
   const m = $('#modal'), i = INSTANCES[inst];
   m.classList.add('on'); $('#mBar').style.width = '3%';
-  if (!i) { $('#mTitle').textContent = 'No profile yet'; $('#mSteps').innerHTML = '<div class="step"><i></i>Create a profile first (the profile picker, top left)</div>'; return; }
+  if (!i) { $('#mTitle').textContent = 'No profile yet'; $('#mSteps').innerHTML = '<div class="step"><i></i>Create a profile first</div>'; return; }
   $('#mTitle').textContent = host ? `Joining ${host}` : `Starting ${i.name}`;
   $('#mSteps').innerHTML = '<div class="step run"><i></i><span id="mPhase">Starting</span></div>';
   launching = i.id;
@@ -698,7 +698,7 @@ async function drawLibrary() {
         <button class="ib" data-lib="dup" title="Duplicate"><i data-i="copy"></i></button>
         <button class="ib" data-lib="folder" title="Open folder"><i data-i="folder"></i></button>
         <button class="ib" data-lib="del" title="Delete"><i data-i="trash"></i></button>
-      </div><div class="lib-set" data-cfg="${esc(p.id)}" hidden><select name="ram" title="Memory for this profile"><option value="0">Memory: automatic</option>${[2, 3, 4, 6, 8, 12, 16].map(g => `<option value="${g * 1024}"${p.ramMaxMb === g * 1024 ? ' selected' : ''}>${g} GB</option>`).join('')}</select><input class="args" name="args" placeholder="Extra JVM arguments" value="${esc(p.jvmArgs)}" spellcheck="false"><button class="btn purple" data-lib="cfgsave" style="height:36px">Save</button></div></div>`).join('') : '<div class="lib-empty">No profiles yet. Create one above: a profile is a Minecraft version with its own mods, packs and settings.</div>';
+      </div><div class="lib-set" data-cfg="${esc(p.id)}" hidden><select name="ram" title="Memory for this profile"><option value="0">Memory: automatic</option>${[2, 3, 4, 6, 8, 12, 16].map(g => `<option value="${g * 1024}"${p.ramMaxMb === g * 1024 ? ' selected' : ''}>${g} GB</option>`).join('')}</select><input class="args" name="args" placeholder="Extra JVM arguments" value="${esc(p.jvmArgs)}" spellcheck="false"><button class="btn purple" data-lib="cfgsave" style="height:36px">Save</button></div></div>`).join('') : '<div class="lib-empty">No profiles yet. A profile is a Minecraft version with its own mods and settings.</div>';
   icons($('#libGrid'));
 }
 $('#libNew').onsubmit = async e => {
@@ -729,7 +729,7 @@ function stopClip() { clearTimeout(vTimer); VIEW && (VIEW.playing = false); $('#
 $('#clipGrid').addEventListener('click', async e => {
   const c = e.target.closest('[data-m]'); if (!c) return; const m = drawClips.items[+c.dataset.m];
   VIEW = { m, i: 0 }; $('#viewer').hidden = false; $('#vPlay').hidden = clipKind !== 'clips';
-  if (!(await showFrame(0))) { $('#vInfo').textContent = 'No preview for this file type here. Open its folder to play it.'; }
+  if (!(await showFrame(0))) { $('#vInfo').textContent = 'No preview. Open the folder to play it.'; }
 });
 $('#vPlay').onclick = async () => {
   if (!VIEW) return; if (VIEW.playing) return stopClip();
@@ -769,7 +769,7 @@ function drawLocker() {
     const img = c.img?.(i);
     return `<button class="lk-card ${i.id === on ? 'on' : ''}" data-id="${esc(i.id)}"><div class="th" ${img ? `style="background-image:url(${img})"` : ''}>${img ? '' : `<i data-i="${c.icon}"></i>`}</div><b>${esc(i.name)}</b>${i.description ? `<small>${esc(i.description)}</small>` : ''}${i.id === on ? '<i data-i="check" class="wornic"></i>' : ''}</button>`;
   }).join('');
-  $('#lockNote').textContent = 'Equipped here; other players see it once you are on a Dexter server.';
+  $('#lockNote').textContent = 'Equipped. Others see it on Dexter servers.';
   icons($('#lockTabs')); icons($('#lockGrid'));
 }
 $('#lockTabs').addEventListener('click', e => { const b = e.target.closest('[data-lk]'); if (b) { lockCat = b.dataset.lk; drawLocker(); } });

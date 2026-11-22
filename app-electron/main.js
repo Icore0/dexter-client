@@ -47,9 +47,14 @@ let BACKEND = null;    // { port, token, proc }
 function backendCommand() {
   let cfg = {};
   try { cfg = JSON.parse(fs.readFileSync(path.join(__dirname, 'backend', 'backend.json'), 'utf8')); } catch { /* no packaged backend */ }
+  // A native executable (env DEXTER_BACKEND_EXE or "exe" in backend.json) wins: same env, same READY line, no Java needed.
+  const exe = process.env.DEXTER_BACKEND_EXE || (cfg.exe && (path.isAbsolute(cfg.exe) ? cfg.exe : path.resolve(__dirname, 'backend', cfg.exe)));
+  if (exe) return { exe };
   const java = process.env.DEXTER_JAVA || (cfg.java && (path.isAbsolute(cfg.java) ? cfg.java : path.resolve(__dirname, 'backend', cfg.java)));
   const cp = process.env.DEXTER_BACKEND_CP || (cfg.classpath || []).map(p => path.resolve(__dirname, 'backend', p)).join(path.delimiter);
-  return java && cp ? { java, cp } : null;
+  // The Java main class can be renamed without touching the UI: DEXTER_BACKEND_CLASS or "mainClass" in backend.json.
+  const mainClass = process.env.DEXTER_BACKEND_CLASS || cfg.mainClass || 'net.veloclient.launcher.api.DexterBackend';
+  return java && cp ? { java, cp, mainClass } : null;
 }
 function startBackend() {
   return new Promise(resolve => {
@@ -58,8 +63,9 @@ function startBackend() {
     const token = crypto.randomBytes(24).toString('hex');
     const home = process.env.DEXTER_BACKEND_HOME;   // self-test only: a throw-away home for the backend
     const env = { ...process.env, DEXTER_BACKEND_TOKEN: token };
-    if (WIN && home) env.APPDATA = home;   // the backend's data folder is %APPDATA%\DexterClient on Windows (VeloPaths), not user.home
-    const proc = spawn(cmd.java, ['-Dfile.encoding=UTF-8', ...(home ? ['-Duser.home=' + home] : []), '-Xms16m', '-Xmx256m', '-XX:+UseSerialGC', '-XX:TieredStopAtLevel=1', '-XX:CICompilerCount=1', '-Xss512k', '-XX:MaxMetaspaceSize=128m', '-XX:ReservedCodeCacheSize=32m', '-XX:-UsePerfData', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-cp', cmd.cp, 'net.veloclient.launcher.api.DexterBackend'], { env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });   // windowsHide: no console window flashes on Windows
+    if (WIN && home) env.APPDATA = home;   // the backend's data folder is %APPDATA%\DexterClient on Windows (DexterPaths), not user.home
+    const proc = cmd.exe ? spawn(cmd.exe, [], { env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true })
+      : spawn(cmd.java, ['-Dfile.encoding=UTF-8', ...(home ? ['-Duser.home=' + home] : []), '-Xms16m', '-Xmx256m', '-XX:+UseSerialGC', '-XX:TieredStopAtLevel=1', '-XX:CICompilerCount=1', '-Xss512k', '-XX:MaxMetaspaceSize=128m', '-XX:ReservedCodeCacheSize=32m', '-XX:-UsePerfData', '-XX:MinHeapFreeRatio=10', '-XX:MaxHeapFreeRatio=20', '-cp', cmd.cp, cmd.mainClass], { env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });   // windowsHide: no console window flashes on Windows
     let done = false, buf = '';
     const finish = r => { if (!done) { done = true; resolve(r); } };
     proc.stdout.on('data', d => {
@@ -227,7 +233,7 @@ async function folderRoots() {
   if (r.status === 200 && r.data && r.data.data) {
     return (FOLDER_ROOTS = [String(r.data.data), r.data.logs ? String(r.data.logs) : ''].filter(Boolean));   // cached: the backend's answer is stable
   }
-  // backend not up yet: this OS's own data folder (same tree VeloPaths resolves). Not cached - the real answer may follow.
+  // backend not up yet: this OS's own data folder (same tree the backend uses). Not cached - the real answer may follow.
   const root = WIN
     ? path.join(process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'), 'DexterClient')
     : path.join(os.homedir(), '.dexter-client');
@@ -344,7 +350,7 @@ async function copyInstance(src, dest, worlds, icon) {
       fs.mkdirSync(to, { recursive: true });
       const have = new Set(fs.readdirSync(to).map(key));
       for (const f of fs.readdirSync(from)) {
-        if (d === 'mods' && /velo|dexter/i.test(f)) continue;                      // Dexter brings its own mod
+        if (d === 'mods' && /velo|dexter/i.test(f)) continue;                      // Dexter brings its own mod (old builds carried the earlier name, so skip those too)
         if (d === 'mods' && have.has(key(f))) continue;                             // already there (Fabric API etc.): never two versions
         await fs.promises.cp(path.join(from, f), path.join(to, f), { recursive: true, force: false, errorOnExist: false }); files++;
       }
