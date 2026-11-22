@@ -301,6 +301,21 @@
   </div>
 </div>
 
+<!-- ================= MICROSOFT SIGN-IN (device code) ================= -->
+<div class="mscard-wrap" id="msCard" hidden>
+  <div class="mscard" role="dialog" aria-modal="true" aria-labelledby="msCardTitle">
+    <h2 id="msCardTitle">Login with Microsoft</h2>
+    <p class="mscard-sub">Your browser will open. Enter the code below on Microsoft's page to finish signing in.</p>
+    <b class="mscard-code" id="msCardCode">WBFP5P93</b>
+    <div class="mscard-actions">
+      <button class="mscard-btn" id="msCardCopy">Copy code</button>
+      <button class="mscard-btn" id="msCardOpen">Open Microsoft sign-in</button>
+    </div>
+    <p class="mscard-foot">Finish signing in in your browser. This window will close automatically.</p>
+    <button class="mscard-btn cancel" id="msCardCancel">Cancel</button>
+  </div>
+</div>
+
 <script src="icons.js"></script>
 <script src="style-load.js" data-load="pvphq-icons.js"></script>
 <script src="vendor/skinview3d.bundle.js"></script>

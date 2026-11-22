@@ -120,15 +120,43 @@ async function addMicrosoft(errEl) {
   if (status === 0) return 'preview';   // no backend (UI-only build): open the launcher anyway, in preview mode
   if (status !== 200) { errEl.textContent = data.error || 'Microsoft sign-in failed'; return false; }
   $('#msCodeV').textContent = data.userCode; $('#msCode').hidden = false;
+  openMsCard(data.userCode);
   window.dexter?.open?.(data.verificationUri);
   clearInterval(msPoll);
   return new Promise(res => { msPoll = setInterval(async () => {
     const r = await BE('GET', '/accounts/microsoft');
     if (r.data.state === 'pending') return;
-    clearInterval(msPoll); $('#msCode').hidden = true;
+    clearInterval(msPoll); $('#msCode').hidden = true; closeMsCard();
     if (r.data.state === 'done') { await loadAccounts(); applyAccount(); res(true); } else { errEl.textContent = r.data.error || 'Microsoft sign-in failed'; res(false); }
   }, 2000); });
 }
+// The Microsoft device-code card: after sign-in starts, the code is shown big and copyable, with the
+// "Open Microsoft sign-in" button and a Cancel. One design, so both launcher styles get the same card.
+function msDemoCode() { const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; return Array.from({ length: 8 }, () => a[Math.floor(Math.random() * a.length)]).join(''); }
+function openMsCard(code) {
+  const el = $('#msCard'); if (!el) return;
+  $('#msCardCode').textContent = String(code || msDemoCode()).toUpperCase();
+  el.hidden = false; void el.offsetWidth; el.classList.add('on');   // reflow first so the fade-in runs
+}
+function closeMsCard() {
+  const el = $('#msCard'); if (!el || el.hidden) return;
+  el.classList.remove('on'); setTimeout(() => { el.hidden = true; }, 220);
+}
+$('#msCardCopy').onclick = async () => {
+  const code = $('#msCardCode').textContent, b = $('#msCardCopy');
+  try { await navigator.clipboard.writeText(code); }
+  catch {
+    const t = document.createElement('textarea'); t.value = code; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); } catch { /* clipboard unavailable */ }
+    t.remove();
+  }
+  b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy code'; }, 1400);
+};
+$('#msCardOpen').onclick = () => window.dexter?.open?.('https://microsoft.com/link');
+$('#msCardCancel').onclick = closeMsCard;
+$('#msCard').addEventListener('click', e => { if (e.target.id === 'msCard') closeMsCard(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMsCard(); });
+
 async function dropAccount(i) {
   const a = AC.list[i]; if (!a) return;
   await BE('DELETE', '/accounts/' + encodeURIComponent(a.uuid));
@@ -142,7 +170,7 @@ const leave = () => {
   closeMenus(); window.dexter?.mode('login');
   $('#offForm').hidden = true; $('#offName').value = ''; $('#offErr').textContent = ''; $('#login').classList.remove('off-on', 'gone');
 };
-$('#loginMs').onclick = async () => { if (await addMicrosoft($('#msErr'))) enter(); };
+$('#loginMs').onclick = async () => { const r = await addMicrosoft($('#msErr')); if (r) { enter(); if (r === 'preview') openMsCard(); } };
 $('#loginOff').onclick = () => { $('#offForm').hidden = false; $('#login').classList.add('off-on'); $('#offName').focus(); if (!ACMETA.offlineAllowed) $('#offErr').textContent = ACMETA.offlineRule; };
 $('#offForm').onsubmit = e => {
   e.preventDefault(); const n = $('#offName').value.trim();
@@ -150,7 +178,7 @@ $('#offForm').onsubmit = e => {
   addOffline(n, $('#offErr')).then(ok => { if (ok) enter(); });
 };
 $('#offName').oninput = () => { $('#offErr').textContent = ''; };
-$('#msAdd').onclick = () => { closeMenus(); addMicrosoft($('#addErr')); };
+$('#msAdd').onclick = async () => { closeMenus(); const r = await addMicrosoft($('#addErr')); if (r === 'preview') openMsCard(); };
 $('#addForm').onsubmit = e => {
   e.preventDefault(); const n = $('#addName').value.trim();
   if (!NAME_OK.test(n)) { $('#addName').value = ''; $('#addName').placeholder = NAME_ERR; return; }

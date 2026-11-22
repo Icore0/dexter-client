@@ -732,3 +732,19 @@ input:focus,input:focus-visible{outline:none}
 /* Cosmetics: coming soon */
 #cosmetics .ward{display:none!important}
 #cosmetics .soon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Pixelify Sans',monospace;font-weight:700;font-size:clamp(56px,9vw,128px);line-height:.95;letter-spacing:.04em;color:#fff;text-transform:uppercase;text-shadow:5px 5px 0 rgba(0,0,0,.55);padding:0 40px}
+
+/* ---------- Microsoft sign-in card (device code, one design in both launcher styles) ---------- */
+.mscard-wrap{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:32px;background:rgba(5,5,7,.34);opacity:0;visibility:hidden;transition:opacity .2s var(--ease),visibility .2s}
+.mscard-wrap[hidden]{display:none}
+.mscard-wrap.on{opacity:1;visibility:visible}
+.mscard{width:min(480px,calc(100vw - 48px));padding:26px 28px 24px;border-radius:18px;background:#0b0b0c;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 40px 90px rgba(0,0,0,.65);transform:translateY(8px) scale(.985);transition:transform .25s var(--ease)}
+.mscard-wrap.on .mscard{transform:none}
+.mscard h2{margin:0 0 9px;font-size:20px;font-weight:600;letter-spacing:-.01em}
+.mscard-sub{margin:0;max-width:410px;color:var(--mute);font-size:13.5px;line-height:1.5}
+.mscard-code{display:block;margin:16px 0 20px;font-family:var(--font);font-size:29px;font-weight:700;letter-spacing:.05em;color:var(--ink);user-select:text}
+.mscard-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mscard-btn{height:46px;padding:0 18px;border-radius:10px;background:#141417;color:var(--ink);font-size:14px;font-weight:500;box-shadow:inset 0 0 0 1px rgba(255,255,255,.13);transition:background .15s,transform .15s var(--ease)}
+.mscard-btn:hover{background:#1c1c20}
+.mscard-btn:active{transform:scale(.985)}
+.mscard-foot{margin:16px 0 0;font-size:12.5px;color:var(--dim)}
+.mscard-btn.cancel{justify-self:start;height:40px;padding:0 22px;margin-top:18px;border-radius:8px}
