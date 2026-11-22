@@ -117,6 +117,7 @@ let msPoll;
 async function addMicrosoft(errEl) {
   errEl.textContent = '';
   const { status, data } = await BE('POST', '/accounts/microsoft', {});
+  if (status === 0) return 'preview';   // no backend (UI-only build): open the launcher anyway, in preview mode
   if (status !== 200) { errEl.textContent = data.error || 'Microsoft sign-in failed'; return false; }
   $('#msCodeV').textContent = data.userCode; $('#msCode').hidden = false;
   window.dexter?.open?.(data.verificationUri);
