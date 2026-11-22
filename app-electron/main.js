@@ -486,6 +486,8 @@ ipcMain.on('mode', (e, mode) => {
   if (mode === 'app') {
     w.setMinimumSize(APP_MIN.width, APP_MIN.height);
     w.setMaximizable(true);
+    // A finished sign-in leaves the launcher on the Modern look; remember it so the next start opens Modern as well.
+    try { fs.mkdirSync(path.dirname(STYLE_FILE), { recursive: true }); fs.writeFileSync(STYLE_FILE, JSON.stringify({ style: 'glass' })); } catch { /* data folder not writable */ }
   } else {
     w.setMinimumSize(size.width, size.height);
     w.setMaximizable(false);
